@@ -1,23 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import HelloWorld from "./components/HelloWorld";
+import "./assets/styles.css";
+import Header from "./components/Header";
+import Tasks from "./components/Tasks";
+import { useState } from "react";
 
 function App() {
+  const [tasks, setTasks] = useState([
+    {
+      desc: "Learn react",
+      id: 1,
+      date: "2022-01-03 12:00:00",
+      complete: false,
+    },
+    {
+      desc: "Learn piano",
+      id: 2,
+      date: "2022-01-05 12:00:00",
+      complete: false,
+    },
+  ]);
+
+  const onTglStatus = (task) => {
+    console.log("completing task");
+    setTasks(
+      tasks.map((chkTask) => {
+        chkTask.complete =
+          task.id === chkTask.id ? !chkTask.complete : chkTask.complete;
+        return chkTask;
+      })
+    );
+  };
+
+  const onSaveTask = (desc, date) => {
+    setTasks([
+      { desc: desc, date: date, id: Date.now(), complete: false },
+      ...tasks,
+    ]);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <div className="container">
+        <Tasks tasks={tasks} onTglStatus={onTglStatus}></Tasks>
+      </div>
     </div>
   );
 }
